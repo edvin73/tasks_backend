@@ -43,4 +43,20 @@ public class GlobalExceptionHandler {
 		ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), ex.getMessage(), HttpStatus.BAD_REQUEST.value());
 		return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(OptimisticLockingException.class)
+	public ResponseEntity<ErrorMessage> handleObjectOptimisticLockingFailureException(OptimisticLockingException ex) {
+		
+		ErrorMessage errorMessage =  new ErrorMessage(LocalDateTime.now(), ex.getMessage(), HttpStatus.CONFLICT.value());
+		
+		return new ResponseEntity<>(errorMessage, HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(FieldValidationException.class)
+	public ResponseEntity<ErrorMessage> handleFieldValidationException(FieldValidationException ex) {
+		
+		ErrorMessage errorMessage = new ErrorMessage(LocalDateTime.now(), ex.getMessage(), HttpStatus.BAD_REQUEST.value());
+		
+		return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+	}
 }

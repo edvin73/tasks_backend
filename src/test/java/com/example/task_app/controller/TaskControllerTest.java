@@ -42,8 +42,16 @@ class TaskControllerTest {
 
     @Test
     void getAllTasks_returnsOkAndJsonArray() throws Exception {
-        Task task = new Task(1L, "Title One", "0");
-        TaskDTO dto = new TaskDTO(1L, "Title One", "1");
+        Task task = new Task();
+        task.setTaskId(1L);
+        task.setTitle("Title One");
+        task.setAccomplished("1");
+        
+        
+        TaskDTO dto = new TaskDTO();
+        dto.setTaskId(1L);
+        dto.setTitle("Title One");
+        dto.setAccomplished("1");
 
         when(taskService.getAllTasks()).thenReturn(List.of(task));
         when(taskMapper.mapTaskListToDTOList(anyList())).thenReturn(List.of(dto));
@@ -55,8 +63,16 @@ class TaskControllerTest {
 
     @Test
     void getTaskById_returnsOkAndJson() throws Exception {
-        Task task = new Task(2L, "Title Two", "YES");
-        TaskDTO dto = new TaskDTO(2L, "Title Two", "YES");
+        Task task = new Task();
+        task.setTaskId(2L);
+        task.setTitle("Title Two");
+        task.setAccomplished("1");
+                 			
+        TaskDTO dto = new TaskDTO();
+        dto.setTaskId(2L);
+        dto.setTitle("Title Two");
+        dto.setAccomplished("1");
+         
 
         when(taskService.getTaskById(2L)).thenReturn(task);
         when(taskMapper.mapTaskToDTO(task)).thenReturn(dto);
@@ -70,9 +86,21 @@ class TaskControllerTest {
     @Test
     void createTask_returnsCreated() throws Exception {
         TaskDTO requestDto = new TaskDTO(null, "New Task", "0");
-        Task toSave = new Task(null, "New Task", "0");
-        Task saved = new Task(3L, "New Task", "0");
-        TaskDTO responseDto = new TaskDTO(3L, "New Task", "0");
+        Task toSave = new Task();
+        toSave.setTaskId(null);
+        toSave.setTitle("New Task");
+        toSave.setAccomplished("0"); 
+        
+        Task saved = new Task();
+        saved.setTaskId(3L);
+        saved.setTitle("New Task");
+		saved.setAccomplished("0");
+		 
+        
+        TaskDTO responseDto = new TaskDTO();
+        responseDto.setTaskId(3L);
+        responseDto.setTitle("New Task");
+        responseDto.setAccomplished("0");
 
         when(taskMapper.mapTaskDTOToTask(any(TaskDTO.class))).thenReturn(toSave);
         when(taskService.createTask(toSave)).thenReturn(saved);
@@ -88,10 +116,26 @@ class TaskControllerTest {
 
     @Test
     void updateTask_returnsOk() throws Exception {
-        TaskDTO requestDto = new TaskDTO(null, "Updated", "1");
-        Task toUpdate = new Task(null, "Updated", "1");
-        Task updated = new Task(4L, "Updated", "1");
-        TaskDTO responseDto = new TaskDTO(4L, "Updated", "1");
+        TaskDTO requestDto = new TaskDTO();
+        requestDto.setTaskId(null);
+        requestDto.setTitle("Updated");
+        requestDto.setAccomplished("1");
+         
+        
+        Task toUpdate = new Task();
+        toUpdate.setTaskId(null);
+        toUpdate.setTitle("Updated");
+        toUpdate.setAccomplished("1");
+                 
+        Task updated = new Task();
+        updated.setTaskId(4L);
+        updated.setTitle("Updated");
+        updated.setAccomplished("1");
+         
+        TaskDTO responseDto = new TaskDTO();
+        responseDto.setTaskId(4L);
+        responseDto.setTitle("Updated");
+        responseDto.setAccomplished("1");
 
         when(taskMapper.mapTaskDTOToTask(any(TaskDTO.class))).thenReturn(toUpdate);
         when(taskService.updateTask(4L, toUpdate)).thenReturn(updated);

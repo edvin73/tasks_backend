@@ -79,4 +79,12 @@ public class TaskController {
 		
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}	
+	
+	@GetMapping("/lock-test")
+	public ResponseEntity<String> lockTest() {
+		
+		taskService.lockTest();
+		
+		return new ResponseEntity<>("Lock test completed", HttpStatus.OK);
+	}
 }

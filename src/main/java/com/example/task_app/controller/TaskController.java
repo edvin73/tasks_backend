@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
  
 import com.example.task_app.model.TaskDTO;
+import com.example.task_app.model.TaskDtoMin;
 import com.example.task_app.model.TaskMapper;
 import com.example.task_app.service.TaskService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,19 +40,30 @@ public class TaskController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<List<TaskDTO>> getAllTasks() {
+	@Operation(summary = "Get all tasks", description = "Returns a list of all tasks with minimal details")
+	@Tag(name = "Get Tasks", description = "Endpoints for retrieving tasks")
+	public ResponseEntity<List<TaskDtoMin>> getAllTasks() {
 		
-		List<TaskDTO> tasks = taskMapper.mapTaskListToDTOList(taskService.getAllTasks());
+		List<TaskDtoMin> tasks = taskMapper.mapTasksToDtoMinList(taskService.getAllTasks());
 		
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<TaskDTO> getTaskById(@PathVariable("id") Long id) {
+	@Tag(name = "Get Task by ID", description = "Endpoint for retrieving a task by its ID")
+	public ResponseEntity<TaskDtoMin> getTaskById(@PathVariable("id") Long id) {
 		
-		TaskDTO task = taskMapper.mapTaskToDTO(taskService.getTaskById(id));
+		TaskDtoMin task = taskMapper.mapTaskToDtoMin(taskService.getTaskById(id));
 		
 		return new ResponseEntity<>(task, HttpStatus.OK);
+	}
+	
+	@GetMapping("/users/{username}")
+	public ResponseEntity<List<TaskDTO>> getTaskByUsername(@PathVariable("username") String username) {
+		
+		List<TaskDTO> tasks = taskMapper.mapTaskListToDTOList(taskService.getTasksByUsername(username));
+		
+		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}
 	
 	@PostMapping("/")

@@ -85,7 +85,7 @@ class TaskControllerTest {
 
     @Test
     void createTask_returnsCreated() throws Exception {
-        TaskDTO requestDto = new TaskDTO(null, "New Task", "0");
+        TaskDTO requestDto = new TaskDTO(null, "New Task", "0", null);
         Task toSave = new Task();
         toSave.setTaskId(null);
         toSave.setTitle("New Task");

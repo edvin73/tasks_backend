@@ -76,14 +76,14 @@ class TaskServiceTest {
     void createTask_savesAndReturns() {
         when(taskRepository.save(any(Task.class))).thenReturn(task1);
 
-        Task result = taskService.createTask(new Task(null, "Title One", "0", 0));
+        Task result = taskService.createTask(new Task(null, "Title One", "0", null, 0));
 
         assertThat(result).isEqualTo(task1);
     }
 
     @Test
     void updateTask_noChanges_doesNotSave() {
-        Task incoming = new Task(1L, "Title One", "0", 0);
+        Task incoming = new Task(1L, "Title One", "0", null, 0);
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task1));
 
         Task result = taskService.updateTask(1L, incoming);
@@ -94,8 +94,8 @@ class TaskServiceTest {
 
     @Test
     void updateTask_withChanges_saves() {
-        Task incoming = new Task(1L, "New Title", "0", 0);
-        Task saved = new Task(1L, "New Title", "0", 0);
+        Task incoming = new Task(1L, "New Title", "0",  null, 0);
+        Task saved = new Task(1L, "New Title", "0", null, 0);
 
         when(taskRepository.findById(1L)).thenReturn(Optional.of(task1));
         when(taskRepository.save(any(Task.class))).thenReturn(saved);

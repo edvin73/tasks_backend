@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import com.example.task_app.config.DatabaseConfig;
 
 @EnableConfigurationProperties(DatabaseConfig.class)
-@SpringBootApplication
+@SpringBootApplication 
 public class TaskAppApplication {
 
 	public static void main(String[] args) {

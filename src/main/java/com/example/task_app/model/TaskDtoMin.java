@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TaskDTO {
+public class TaskDtoMin {
 	
 	private Long taskId;
 	
@@ -19,6 +19,7 @@ public class TaskDTO {
 	
 	private String accomplished;
 	
-	private UserDto user;
+	private UserDtoMin user;
+	 
 
 }

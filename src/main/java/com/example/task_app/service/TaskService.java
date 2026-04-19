@@ -13,6 +13,7 @@ import com.example.task_app.error.FieldValidationException;
 import com.example.task_app.error.OptimisticLockingException;
 import com.example.task_app.error.TaskNotFoundException;
 import com.example.task_app.repository.TaskRepository;
+import com.example.task_app.repository.UserRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -24,15 +25,18 @@ public class TaskService {
 	
 	private final TaskRepository taskRepository;
 	private final DatabaseConfig databaseConfig;
+	private final UserRepository userRepository;
 	
 	@Autowired
 	private EntityManager entityManager;
 	
 	
 	public TaskService(TaskRepository taskRepository,
-				DatabaseConfig databaseConfig) {	
+				DatabaseConfig databaseConfig,
+				UserRepository userRepository) {	
 		this.taskRepository = taskRepository;
 		this.databaseConfig = databaseConfig;
+		this.userRepository = userRepository;
 	} 
 	
 	public List<Task> getAllTasks() {
@@ -45,10 +49,34 @@ public class TaskService {
 	}
 	
 	public Task getTaskById(Long id) {
+		
 		return taskRepository.findById(id).orElseThrow( () -> {
 			throw new TaskNotFoundException(id);
 		});
+		
+		//create a delay to simulate a long-running transaction and test optimistic locking
+//		try {
+//			Thread.sleep(10000); // 10 seconds delay
+//		} catch (InterruptedException e) {
+//			Thread.currentThread().interrupt();
+//			throw new RuntimeException("Thread was interrupted", e);
+//		}
+//		
+//		return taskRepository.findById(id).orElseThrow( () -> {
+//			throw new TaskNotFoundException(id);
+//		});
 	}
+	
+	public List<Task> getTasksByUsername(String username) {
+		
+		List<Task> tasks = this.userRepository.findByUsernameStartsWithIgnoreCase(username)
+				.stream()
+				.flatMap(user -> user.getTasks().stream())
+				.toList();	
+		
+		return tasks;
+	}
+	 
 	
 	public Task createTask(Task task)   {
 		
@@ -83,6 +111,12 @@ public class TaskService {
 		
 		if(!task.getAccomplished().equals(taskToUpdate.getAccomplished()) ) {
 			taskToUpdate.setAccomplished(task.getAccomplished());
+			updatedFields++;
+		}
+		
+		if( (task.getUser() != null) && (!task.getUser().equals(taskToUpdate.getUser())) ) {
+			
+			taskToUpdate.setUser(task.getUser());
 			updatedFields++;
 		}
 		 
